@@ -91,12 +91,16 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-          <p>© 2025 Günaydın Export. Tüm hakları saklıdır.</p>
-          <div className="flex gap-6">
+        <div className="mt-12 pt-8 border-t border-gray-800 space-y-4 text-sm text-gray-500">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             <Link href="/gizlilik" className="hover:text-rose-400 transition-colors">Gizlilik Politikası</Link>
+            <Link href="/kvkk" className="hover:text-rose-400 transition-colors">KVKK</Link>
             <Link href="/kullanim-sartlari" className="hover:text-rose-400 transition-colors">Kullanım Şartları</Link>
+            <Link href="/mesafeli-satis" className="hover:text-rose-400 transition-colors">Mesafeli Satış Sözleşmesi</Link>
+            <Link href="/iade-politikasi" className="hover:text-rose-400 transition-colors">İade Politikası</Link>
+            <Link href="/cerez-politikasi" className="hover:text-rose-400 transition-colors">Çerez Politikası</Link>
           </div>
+          <p className="text-center">© 2025 Günaydın Export. Tüm hakları saklıdır.</p>
         </div>
       </div>
     </footer>
