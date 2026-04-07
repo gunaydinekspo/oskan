@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 const geist = Geist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "oskan — Kadın Giyim",
+  title: "Günaydın Export — Kadın Giyim",
   description:
     "Modern kadının tarzını yansıtan kaliteli ve şık kadın giyim koleksiyonu.",
   keywords: ["kadın giyim", "elbise", "bluz", "pantolon", "etek", "moda"],

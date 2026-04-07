@@ -39,7 +39,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <span className="text-2xl font-bold tracking-tight text-gray-900">
-              oskan<span className="text-rose-500">.</span>
+              Günaydın Export<span className="text-rose-500">.</span>
             </span>
           </Link>
 

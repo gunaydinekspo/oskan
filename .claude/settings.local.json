@@ -6,7 +6,13 @@
       "Bash(npm run:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m 'feat: kadın giyim e-ticaret sitesi - oskan:*)"
+      "Bash(git commit -m 'feat: kadın giyim e-ticaret sitesi - oskan:*)",
+      "Bash(git remote:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(npm i:*)",
+      "Bash(npx vercel:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="md:col-span-1">
             <Link href="/">
               <span className="text-2xl font-bold text-white">
-                oskan<span className="text-rose-400">.</span>
+                Günaydın Export<span className="text-rose-400">.</span>
               </span>
             </Link>
             <p className="mt-3 text-sm leading-relaxed text-gray-400">
@@ -92,7 +92,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-          <p>© 2025 oskan. Tüm hakları saklıdır.</p>
+          <p>© 2025 Günaydın Export. Tüm hakları saklıdır.</p>
           <div className="flex gap-6">
             <Link href="/gizlilik" className="hover:text-rose-400 transition-colors">Gizlilik Politikası</Link>
             <Link href="/kullanim-sartlari" className="hover:text-rose-400 transition-colors">Kullanım Şartları</Link>
