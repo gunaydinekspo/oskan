@@ -107,22 +107,55 @@ export default function HomePage() {
             <p className="mt-2 text-gray-500">İstediğiniz kategoriye göz atın</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {categories.slice(1).map((cat) => (
+          <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+            {[
+              {
+                id: "elbise",
+                label: "Elbise",
+                image: "https://images.unsplash.com/photo-1572804013427-4d7ca7268217?w=400&q=80",
+              },
+              {
+                id: "bluz",
+                label: "Bluz & Gömlek",
+                image: "https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=400&q=80",
+              },
+              {
+                id: "pantolon",
+                label: "Pantolon",
+                image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&q=80",
+              },
+              {
+                id: "etek",
+                label: "Etek",
+                image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=400&q=80",
+              },
+              {
+                id: "dis-giyim",
+                label: "Dış Giyim",
+                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80",
+              },
+              {
+                id: "triko",
+                label: "Triko & Kazak",
+                image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&q=80",
+              },
+            ].map((cat) => (
               <Link
                 key={cat.id}
                 href={`/urunler?kategori=${cat.id}`}
-                className="group flex flex-col items-center gap-3 p-4 bg-gray-50 hover:bg-rose-50 rounded-2xl transition-colors"
+                className="group flex flex-col items-center gap-2.5"
               >
-                <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow text-2xl">
-                  {cat.id === "elbise" && "👗"}
-                  {cat.id === "bluz" && "👚"}
-                  {cat.id === "pantolon" && "👖"}
-                  {cat.id === "etek" && "🩱"}
-                  {cat.id === "dis-giyim" && "🧥"}
-                  {cat.id === "triko" && "🧶"}
+                <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-gray-100">
+                  <Image
+                    src={cat.image}
+                    alt={cat.label}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 640px) 33vw, (max-width: 1024px) 33vw, 16vw"
+                  />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
                 </div>
-                <span className="text-xs font-semibold text-gray-700 group-hover:text-rose-600 text-center transition-colors">
+                <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-rose-500 text-center transition-colors">
                   {cat.label}
                 </span>
               </Link>
