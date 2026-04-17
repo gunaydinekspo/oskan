@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useProductStore } from "@/lib/productStore";
 import { Product, categories } from "@/lib/products";
-import { Trash2, Plus, Check } from "lucide-react";
+import { Trash2, Plus, Check, Upload, X } from "lucide-react";
+import { uploadImage } from "./upload-action";
 
 const ADMIN_PASSWORD = "oskan2025";
 
@@ -15,6 +16,7 @@ export default function AdminPage() {
   );
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
   const [formData, setFormData] = useState<Omit<Product, "id"> | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   const products = useProductStore((state) => state.products);
   const addProduct = useProductStore((state) => state.addProduct);
@@ -139,6 +141,53 @@ export default function AdminPage() {
       setSelectedProductId(null);
       setFormData(null);
     }
+  };
+
+  const handleFileUpload = async (
+    files: FileList | null,
+    isMainImage: boolean
+  ) => {
+    if (!files || files.length === 0 || !formData) return;
+
+    setUploading(true);
+    try {
+      for (const file of Array.from(files)) {
+        const formDataToSend = new FormData();
+        formDataToSend.append("file", file);
+        const result = await uploadImage(formDataToSend);
+
+        if (isMainImage) {
+          setFormData({ ...formData, image: result.url });
+        } else {
+          setFormData({
+            ...formData,
+            images: [...formData.images, result.url],
+          });
+        }
+      }
+    } catch (error) {
+      alert("Dosya yükleme başarısız!");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.currentTarget.classList.add("bg-rose-50", "border-rose-300");
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.currentTarget.classList.remove("bg-rose-50", "border-rose-300");
+  };
+
+  const handleDrop = (
+    e: React.DragEvent,
+    isMainImage: boolean
+  ) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove("bg-rose-50", "border-rose-300");
+    handleFileUpload(e.dataTransfer.files, isMainImage);
   };
 
   return (
@@ -315,45 +364,129 @@ export default function AdminPage() {
                     </select>
                   </div>
 
-                  {/* Main Image URL */}
+                  {/* Main Image Upload */}
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Ana Görsel URL *
+                      Ana Görsel *
                     </label>
-                    <input
-                      type="text"
-                      value={formData.image}
-                      onChange={(e) =>
-                        setFormData({ ...formData, image: e.target.value })
-                      }
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-rose-500"
-                      placeholder="https://images.unsplash.com/..."
-                    />
+                    <div
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, true)}
+                      className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center transition-colors cursor-pointer hover:border-rose-300 hover:bg-rose-50"
+                    >
+                      <Upload size={24} className="mx-auto text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-600 mb-1">
+                        Görseli sürükle bırak veya tıkla
+                      </p>
+                      <p className="text-xs text-gray-500 mb-3">
+                        PNG, JPG (Max 5MB)
+                      </p>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e.target.files, true)}
+                        className="hidden"
+                        id="main-image-input"
+                        disabled={uploading}
+                      />
+                      <label
+                        htmlFor="main-image-input"
+                        className="inline-block px-4 py-2 bg-rose-500 text-white text-sm font-medium rounded-lg hover:bg-rose-600 transition-colors"
+                      >
+                        {uploading ? "Yükleniyor..." : "Dosya Seç"}
+                      </label>
+                    </div>
+                    {formData.image && (
+                      <div className="mt-3">
+                        <p className="text-xs text-gray-600 mb-2">
+                          Yüklenen görsel:
+                        </p>
+                        <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-gray-100">
+                          <img
+                            src={formData.image}
+                            alt="Main"
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            onClick={() => setFormData({ ...formData, image: "" })}
+                            className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity"
+                          >
+                            <X size={16} className="text-white" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Additional Images */}
+                  {/* Additional Images Upload */}
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Ek Görseller (virgülle ayrılmış URL'ler)
+                      Ek Görseller
                     </label>
-                    <textarea
-                      value={formData.images.join("\n")}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          images: e.target.value
-                            .split("\n")
-                            .map((u) => u.trim())
-                            .filter((u) => u),
-                        })
-                      }
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-rose-500 font-mono text-sm"
-                      placeholder="https://images.unsplash.com/...&#10;https://images.unsplash.com/...&#10;https://images.unsplash.com/..."
-                      rows={3}
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Her URL'yi yeni satırda yazın. Ana görsel zaten yukarıda.
-                    </p>
+                    <div
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, false)}
+                      className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center transition-colors cursor-pointer hover:border-rose-300 hover:bg-rose-50"
+                    >
+                      <Upload size={24} className="mx-auto text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-600 mb-1">
+                        Görselleri sürükle bırak (birden fazla) veya tıkla
+                      </p>
+                      <p className="text-xs text-gray-500 mb-3">
+                        Aynı anda birden fazla dosya yükleyebilirsiniz
+                      </p>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e.target.files, false)}
+                        className="hidden"
+                        id="images-input"
+                        multiple
+                        disabled={uploading}
+                      />
+                      <label
+                        htmlFor="images-input"
+                        className="inline-block px-4 py-2 bg-rose-500 text-white text-sm font-medium rounded-lg hover:bg-rose-600 transition-colors"
+                      >
+                        {uploading ? "Yükleniyor..." : "Dosya Seç"}
+                      </label>
+                    </div>
+                    {formData.images.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-xs text-gray-600 mb-2">
+                          Yüklenen görseller ({formData.images.length}):
+                        </p>
+                        <div className="flex gap-2 flex-wrap">
+                          {formData.images.map((img, idx) => (
+                            <div
+                              key={idx}
+                              className="relative w-20 h-20 rounded-lg overflow-hidden bg-gray-100 group"
+                            >
+                              <img
+                                src={img}
+                                alt={`Extra ${idx}`}
+                                className="w-full h-full object-cover"
+                              />
+                              <button
+                                onClick={() =>
+                                  setFormData({
+                                    ...formData,
+                                    images: formData.images.filter(
+                                      (_, i) => i !== idx
+                                    ),
+                                  })
+                                }
+                                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <X size={16} className="text-white" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Description */}
