@@ -5,14 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ShoppingBag, Heart, Star, ChevronLeft, Check, Truck, RotateCcw } from "lucide-react";
-import { getProductById, products } from "@/lib/products";
+import { useProducts } from "@/lib/productStore";
 import { useCartStore } from "@/lib/store";
 import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const product = getProductById(Number(id));
+  const products = useProducts();
+  const product = products.find((p) => p.id === Number(id));
 
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");

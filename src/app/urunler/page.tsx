@@ -4,7 +4,8 @@ import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal, ChevronDown, X } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
-import { products, categories } from "@/lib/products";
+import { categories } from "@/lib/products";
+import { useProducts } from "@/lib/productStore";
 import { Suspense } from "react";
 
 const sortOptions = [
@@ -18,6 +19,7 @@ const sortOptions = [
 function ProductsContent() {
   const searchParams = useSearchParams();
   const paramKategori = searchParams.get("kategori") || "tumu";
+  const products = useProducts();
 
   const [selectedCategory, setSelectedCategory] = useState(paramKategori);
   const [sortBy, setSortBy] = useState("default");

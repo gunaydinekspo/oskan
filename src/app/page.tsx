@@ -1,11 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Truck, RotateCcw, Shield, Headphones } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
-import { getFeaturedProducts, categories, products } from "@/lib/products";
+import { categories } from "@/lib/products";
+import { useProducts } from "@/lib/productStore";
 
 export default function HomePage() {
-  const featured = getFeaturedProducts();
+  const products = useProducts();
+  const featured = products.filter((p) => p.badge).slice(0, 4);
   const newArrivals = products.filter((p) => p.badge === "Yeni");
 
   return (
