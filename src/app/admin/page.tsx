@@ -315,10 +315,10 @@ export default function AdminPage() {
                     </select>
                   </div>
 
-                  {/* Image URL */}
+                  {/* Main Image URL */}
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Görsel URL *
+                      Ana Görsel URL *
                     </label>
                     <input
                       type="text"
@@ -329,6 +329,31 @@ export default function AdminPage() {
                       className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-rose-500"
                       placeholder="https://images.unsplash.com/..."
                     />
+                  </div>
+
+                  {/* Additional Images */}
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Ek Görseller (virgülle ayrılmış URL'ler)
+                    </label>
+                    <textarea
+                      value={formData.images.join("\n")}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          images: e.target.value
+                            .split("\n")
+                            .map((u) => u.trim())
+                            .filter((u) => u),
+                        })
+                      }
+                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-rose-500 font-mono text-sm"
+                      placeholder="https://images.unsplash.com/...&#10;https://images.unsplash.com/...&#10;https://images.unsplash.com/..."
+                      rows={3}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Her URL'yi yeni satırda yazın. Ana görsel zaten yukarıda.
+                    </p>
                   </div>
 
                   {/* Description */}
